@@ -1,3 +1,22 @@
+# Use the Mean Shift algorithm to determine the best fit.  According to Wikipedia it is a non-parametric
+# feature-space mathematical analysis technique for locating the maxima of a density function; a so-called
+# mode finder.  Just what we need.
+
+# Instead of running directly on our data I:
+
+#    - Remove and later reinsert the one column full of 1's
+#    - Do two clipping of extreme outliers.  The first clipping removes extrema in all dimensions.
+#      The second clipping removes extrema in the top 50 dimensions.
+#    - Transform the data into its eigenvector basis normalized by the eigenvalue.  The intent is to
+#      set up the input data to have uniform scales in all dimensions, maybe this will help the Mean Shift
+#      kernel.
+#	 - I have not tested whether any of the above really helps: They run fast so it doesn't hurt to include
+#      them but is a place to introduce bugs.  
+#    - One thing not done is remove degenerate parameters.  I tried this but found that the removed parameter
+#      becomes strange.  So the output answer will not preserve unit vector properties.
+#    - I ran this and luckily MeanShift found only on cluster.  This is not guaranteed.
+
+
 import numpy
 from scipy.optimize import minimize
 from scipy.stats import multivariate_normal
@@ -34,12 +53,12 @@ insider = numpy.array(insider)
 # plt.hist(insider)
 # plt.show()
 
-cut1 = 400
+cut1 = 400   # chosen by eye looking at the histogram
 w = insider < cut1
 data = data[w,:]
 
 ## Pass 2: Get rid of outliers in the most important parameters
-ndim = 50
+ndim = 50    # chosen by eye looking at the eigenvalues
 
 mn = numpy.mean(data,axis=0)
 cov = numpy.cov(data,rowvar=False)
@@ -54,7 +73,7 @@ for i in range(data.shape[0]):
 insider = numpy.array(insider)
 # plt.hist(insider)
 # plt.show()
-cut1 = 70
+cut1 = 70    # chosen by eye looking at the histogram
 w = insider < cut1
 data = data[w,:]
 
