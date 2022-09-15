@@ -5,16 +5,16 @@
 # Instead of running directly on our data I:
 
 #    - Remove and later reinsert the one column full of 1's
-#    - Do two clipping of extreme outliers.  The first clipping removes extrema in all dimensions.
+#    - Do two clippings of extreme outliers.  The first clipping removes extrema in all dimensions.
 #      The second clipping removes extrema in the top 50 dimensions.
 #    - Transform the data into its eigenvector basis normalized by the eigenvalue.  The intent is to
 #      set up the input data to have uniform scales in all dimensions, maybe this will help the Mean Shift
 #      kernel.
-#	 - I have not tested whether any of the above really helps: They run fast so it doesn't hurt to include
+#.   - I have not tested whether any of the above really helps: They run fast so it doesn't hurt to include
 #      them but is a place to introduce bugs.  
 #    - One thing not done is remove degenerate parameters.  I tried this but found that the removed parameter
 #      becomes strange.  So the output answer will not preserve unit vector properties.
-#    - I ran this and luckily MeanShift found only on cluster.  This is not guaranteed.
+#    - I ran this and luckily MeanShift found only one cluster.  This is not guaranteed.
 
 
 import numpy
